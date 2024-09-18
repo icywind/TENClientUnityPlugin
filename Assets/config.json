@@ -1,0 +1,11 @@
+{
+    "agentUid": 1234,
+    "channel": "unity3d",
+    "appId": "3df5beb6c72340639f5b214c59f763c6",
+    "rtcToken": "true",
+    "product": "ils",
+    "agoraAsrLanguage": "en-US",
+    "openaiProxyUrl": "",
+    "voiceType": "male",
+    "serverBaseURL":"http://localhost:8080"
+}
