@@ -163,9 +163,6 @@ namespace Agora.TEN.Client
             request.KeepAlive = false;
             request.Timeout = 90000;
 
-            Debug.Log(request.Timeout);
-
-
             using (var postStream = new StreamWriter(request.GetRequestStream()))
             {
                 postStream.Write(json);
@@ -175,7 +172,7 @@ namespace Agora.TEN.Client
             {
                 StreamReader reader = new StreamReader(response.GetResponseStream());
                 string jsonResponse = reader.ReadToEnd();
-                Debug.Log(jsonResponse);
+                Debug.Log(url + " -------> " + jsonResponse);
                 return jsonResponse;
             }
         }

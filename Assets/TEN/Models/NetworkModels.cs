@@ -112,7 +112,7 @@ namespace Agora.TEN.Server.Models
 
         /// Non-zero if there is an error.
         [JsonProperty("data")]
-        public int Data { get; set; }
+        public object Data { get; set; }
 
         /// Explains what went wrong if error occurs.
         [JsonProperty("msg")]

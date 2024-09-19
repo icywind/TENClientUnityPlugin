@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607f0ceac71e449edb8c59fb1d047575, type: 3}
   m_Name: TENConfigInput
   m_EditorClassIdentifier: 
-  AppID: 00e97fd319264c1ea2be69a370bd712e
+  AppID: 3df5beb6c72340639f5b214c59f763c6
   RtcToken: 
   ChannelName: YOUR_CHANNEL_NAME
   AgentUid: 1234
   AgoraAsrLanguage: en-US
   OpenaiProxyUrl: 
   VoiceType: 1
-  ServerBaseURL: https://astra.agoraguru.net
+  ServerBaseURL: http://localhost:8080

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Agora.Rtc;
@@ -7,6 +8,9 @@ using Agora_RTC_Plugin.API_Example;
 using Logger = Agora_RTC_Plugin.API_Example.Logger;
 
 using Agora.TEN.Client;
+using Agora.TEN.Server.Models;
+using Newtonsoft.Json;
+
 namespace Agora.TEN.Demo
 {
     public class TENDemoChat : MonoBehaviour
@@ -23,6 +27,7 @@ namespace Agora.TEN.Demo
         internal Logger Log;
         internal IRtcEngine RtcEngine;
 
+        internal uint LocalUID { get; set; }
 
         void Start()
         {
@@ -30,7 +35,7 @@ namespace Agora.TEN.Demo
             {
                 SetUpUI();
                 InitEngine();
-                JoinChannel();
+                GetTokenAndJoin();
             }
         }
 
@@ -75,7 +80,7 @@ namespace Agora.TEN.Demo
             });
 
         }
-
+        #region --- RTC Functions ---
         internal void ShowVideo()
         {
             var videoSurface = VideoView.gameObject.GetComponent<VideoSurface>();
@@ -96,6 +101,15 @@ namespace Agora.TEN.Demo
             RtcEngine.InitEventHandler(handler);
         }
 
+        async void GetTokenAndJoin()
+        {
+            string res = await NetworkManager.RequestTokenAsync(0);
+            Debug.Log(res);
+
+            AppConfig.Shared.RtcToken = res;
+            JoinChannel();
+        }
+
         void JoinChannel()
         {
             RtcEngine.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_BROADCASTER);
@@ -107,20 +121,49 @@ namespace Agora.TEN.Demo
         private void OnDestroy()
         {
             Debug.Log($"{name}.{this.GetType()} OnDestroy");
+
+            StopSession();
             if (RtcEngine != null)
             {
                 RtcEngine.InitEventHandler(null);
-                RtcEngine.LeaveChannel();
                 RtcEngine.Dispose();
+                RtcEngine = null;
+            }
+        }
+        #endregion
+
+        #region --- TEN Session APIs ---
+
+        internal async void StartSession()
+        {
+            Debug.Log($"AppConfig voicetype = {AppConfig.Shared.VoiceType}");
+            var res = await NetworkManager.ApiRequestStartService(LocalUID);
+            Debug.Log(res);
+            // Sample response:
+            // { "code": "0", "data": null, "msg": "success" }
+            AgoraServerCommandResponse response = JsonConvert.DeserializeObject<AgoraServerCommandResponse>(res);
+            if (response.Code == "0" || response.Msg.ToLower() == "success")
+            {
+                StartCoroutine(KeepAlive());
             }
         }
 
-
-        internal void StartSession()
+        internal IEnumerator KeepAlive()
         {
-            Debug.Log($"AppConfig voicetype = {AppConfig.Shared.VoiceType}");
+            while (RtcEngine != null)
+            {
+                yield return new WaitForSeconds(3);
+                _ = NetworkManager.ApiRequestPingService();
+            }
         }
 
+        internal void StopSession()
+        {
+            _ = NetworkManager.ApiRequestStopService();
+            RtcEngine?.LeaveChannel();
+        }
+
+        #endregion
     }
 
     #region -- Agora Event ---
@@ -147,8 +190,10 @@ namespace Agora.TEN.Demo
             _app.Log.UpdateLog(
                 string.Format("OnJoinChannelSuccess channelName: {0}, uid: {1}, elapsed: {2}",
                     connection.channelId, connection.localUid, elapsed));
-            _app.ShowVideo();
 
+            _app.LocalUID = connection.localUid;
+
+            _app.ShowVideo();
             _app.StartSession();
         }
 
