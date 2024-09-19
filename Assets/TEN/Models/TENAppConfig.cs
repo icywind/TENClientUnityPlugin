@@ -6,7 +6,6 @@ using Newtonsoft.Json.Converters;
 
 namespace Agora.TEN.Client
 {
-
     [JsonConverter(typeof(StringEnumConverter))]
     public enum RtcProducts
     {
@@ -59,24 +58,7 @@ namespace Agora.TEN.Client
             {
                 if (_shared == null)
                 {
-                    var filePath = Path.Combine(Application.dataPath, "config.json");
-                    if (!File.Exists(filePath))
-                    {
-                        Debug.LogError("Config file not found! filePath=" + filePath);
-                        _shared = default;
-                        return _shared;
-                    }
-
-                    try
-                    {
-                        var jsonData = File.ReadAllText(filePath);
-                        _shared = JsonConvert.DeserializeObject<AppConfig>(jsonData);
-                    }
-                    catch
-                    {
-                        Debug.LogError("JSON deserialization failed! filePath=" + filePath);
-                        _shared = default;
-                    }
+                    _shared = new AppConfig();
                 }
                 return _shared;
             }
@@ -117,7 +99,44 @@ namespace Agora.TEN.Client
         /// The base URL of the server
         [JsonProperty("serverBaseURL")]
         public string ServerBaseURL { get; set; }
-        
+
+        public static void ReadConfig(string fileLoc = "")
+        {
+            string filePath = fileLoc;
+            if (filePath == "")
+            {
+                filePath = Path.Combine(Application.dataPath, "config.json");
+            }
+
+            if (!File.Exists(filePath))
+            {
+                Debug.LogError("Config file not found! filePath=" + filePath);
+                _shared = default;
+            }
+
+            try
+            {
+                var jsonData = File.ReadAllText(filePath);
+                _shared = JsonConvert.DeserializeObject<AppConfig>(jsonData);
+            }
+            catch
+            {
+                Debug.LogError("JSON deserialization failed! filePath=" + filePath);
+                _shared = default;
+            }
+        }
+
+        public void SetValue(TENConfigInput input)
+        {
+            this.AgentUid = input.AgentUid;
+            this.AgoraAsrLanguage = input.AgoraAsrLanguage;
+            this.AppId = input.AppID;
+            this.RtcToken = input.RtcToken;
+            this.ServerBaseURL = input.ServerBaseURL;
+            this.VoiceType = input.VoiceType;
+            this.OpenaiProxyUrl = input.OpenaiProxyUrl;
+        }
+
         public override string ToString()
         {
             return $"AgentUid: {AgentUid}, AgoraAsrLanguage: {AgoraAsrLanguage}, OpenaiProxyUrl: {OpenaiProxyUrl}, VoiceType: {VoiceType}, AppId: {AppId}, Channel: {Channel}, RtcToken: {RtcToken}, Product: {Product}, ServerBaseURL: {ServerBaseURL}";
