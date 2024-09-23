@@ -49,7 +49,7 @@ namespace Agora.TEN.Demo
         bool CheckAppId()
         {
             Log = new Logger(LogText);
-            return Log.DebugAssert(AppConfig.Shared.Channel.Length > 10, "Please fill in your appId properly!");
+            return Log.DebugAssert(AppConfig.Shared.AppId.Length > 10, "Please fill in your appId properly!");
         }
 
 
@@ -95,7 +95,7 @@ namespace Agora.TEN.Demo
             RtcEngineContext context = new RtcEngineContext();
             context.appId = AppConfig.Shared.AppId;
             context.channelProfile = CHANNEL_PROFILE_TYPE.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            context.audioScenario = AUDIO_SCENARIO_TYPE.AUDIO_SCENARIO_DEFAULT;
+            context.audioScenario = AUDIO_SCENARIO_TYPE.AUDIO_SCENARIO_MEETING;
             context.areaCode = AREA_CODE.AREA_CODE_GLOB;
             RtcEngine.Initialize(context);
             RtcEngine.InitEventHandler(handler);
@@ -185,9 +185,9 @@ namespace Agora.TEN.Demo
         public override void OnJoinChannelSuccess(RtcConnection connection, int elapsed)
         {
             int build = 0;
-            _app.Log.UpdateLog(string.Format("sdk version: ${0}",
+            Debug.Log(string.Format("sdk version: ${0}",
                 _app.RtcEngine.GetVersion(ref build)));
-            _app.Log.UpdateLog(
+            Debug.Log(
                 string.Format("OnJoinChannelSuccess channelName: {0}, uid: {1}, elapsed: {2}",
                     connection.channelId, connection.localUid, elapsed));
 
@@ -199,19 +199,30 @@ namespace Agora.TEN.Demo
 
         public override void OnLeaveChannel(RtcConnection connection, RtcStats stats)
         {
-            _app.Log.UpdateLog("OnLeaveChannel");
+            Debug.Log("OnLeaveChannel");
         }
 
         public override void OnUserJoined(RtcConnection connection, uint uid, int elapsed)
         {
-            _app.Log.UpdateLog(string.Format("OnUserJoined uid: ${0} elapsed: ${1}", uid,
+            Debug.Log(string.Format("OnUserJoined uid: ${0} elapsed: ${1}", uid,
                 elapsed));
         }
 
         public override void OnUserOffline(RtcConnection connection, uint uid, USER_OFFLINE_REASON_TYPE reason)
         {
-            _app.Log.UpdateLog(string.Format("OnUserOffLine uid: ${0}, reason: ${1}", uid,
+            Debug.Log(string.Format("OnUserOffLine uid: ${0}, reason: ${1}", uid,
                 (int)reason));
+        }
+
+        public override void OnStreamMessage(RtcConnection connection, uint remoteUid, int streamId, byte[] data, ulong length, ulong sentTs)
+        {
+            string str = System.Text.Encoding.UTF8.GetString(data, 0, (int)length);
+            Debug.Log($"StreamMessage from:{remoteUid} ---> " + str);
+        }
+
+        public override void OnRemoteAudioStateChanged(RtcConnection connection, uint remoteUid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed)
+        {
+            Debug.Log($"RemoteAudio state:{state} reason:{reason}");
         }
     }
 

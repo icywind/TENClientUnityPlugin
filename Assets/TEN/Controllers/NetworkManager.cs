@@ -51,33 +51,28 @@ namespace Agora.TEN.Client
         {
             // Get the shared AppConfig instance
             var config = AppConfig.Shared;
-            //var voice = Settings.Instance.GetVoiceName(config.VoiceType);
-            string voice = "male";
-
-            // Create a ServerStartProperties object with configuration for Agora RTC, OpenAI ChatGPT, and Azure TTS
-            var startProperties = new ServerStartProperties
-            {
-                AgoraRtc = new Dictionary<string, string> { { "agora_asr_language", "en-US" } },
-                OpenaiChatGPT = new Dictionary<string, string>
-                {
-                    { "model", "gpt-4o" },
-                    { "greeting", "TEN agent connected. Happy to chat with you today." },
-                    { "checking_vision_text_items", "[\"Let me take a look...\",\"Let me check your camera...\",\"Please wait for a second...\"]" }
-                },
-                AzureTTS = new Dictionary<string, string> { { "azure_synthesis_voice_name", voice } }
-            };
 
             // Create a ServiceStartRequest object with request ID, channel name, OpenAI proxy URL, remote stream ID, graph name, voice type, and start properties
             var data = new ServiceStartRequest
             {
                 RequestId = GetUUID(),
                 ChannelName = config.Channel,
-                OpenaiProxyUrl = config.OpenaiProxyUrl,
-                RemoteStreamId = uid,
+                UserUid = uid,
                 GraphName = "camera.va.openai.azure",
-                VoiceType = config.VoiceType.ToString(),
-                Properties = startProperties
+                VoiceType = config.VoiceType.ToString().ToLower(),
+                Language = "en-US",
             };
+
+            //var data = new StartServiceRequest
+            //{
+            //    RequestId = GetUUID(),
+            //    ChannelName = config.Channel,
+            //    //VoiceType = config.VoiceType.ToString().ToLower(),
+            //    VoiceType = "male",
+            //    UserUid = uid,
+            //    GraphName = "va.openai.azure",
+            //    Language = "en-US"
+            //};
 
             // Construct the API endpoint URL
             var endpoint = $"{config.ServerBaseURL}/start";
@@ -156,6 +151,8 @@ namespace Agora.TEN.Client
         public static async Task<string> ServerApiRequest(string url, object data)
         {
             var json = JsonConvert.SerializeObject(data);
+
+            Debug.LogWarning("API Sending data:" + json);
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";

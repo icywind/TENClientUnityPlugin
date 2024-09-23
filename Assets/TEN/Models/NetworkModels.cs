@@ -44,27 +44,42 @@ namespace Agora.TEN.Server.Models
         [JsonProperty("channel_name")]
         public string ChannelName { get; set; }
 
-        /// The URL for the OpenAI proxy.
-        [JsonProperty("openai_proxy_url")]
-        public string OpenaiProxyUrl { get; set; }
-
-        /// The remote stream ID.
-        [JsonProperty("remote_stream_id")]
-        public uint RemoteStreamId { get; set; }
+        [JsonProperty("user_uid")]
+        public uint UserUid { get; set; }
 
         /// The name of the graph.
         [JsonProperty("graph_name")]
         public string GraphName { get; set; }
 
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
         /// The type of voice.
         [JsonProperty("voice_type")]
         public string VoiceType { get; set; }
 
-        /// The properties for starting the service.
-        [JsonProperty("properties")]
-        public ServerStartProperties Properties { get; set; }
     }
 
+    public class StartServiceRequest
+    {
+        [JsonProperty("request_id")]
+        public string RequestId { get; set; }
+
+        [JsonProperty("channel_name")]
+        public string ChannelName { get; set; }
+
+        [JsonProperty("user_uid")]
+        public uint UserUid { get; set; }
+
+        [JsonProperty("graph_name")]
+        public string GraphName { get; set; }
+
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
+        [JsonProperty("voice_type")]
+        public string VoiceType { get; set; }
+    }
 
     public class ServiceStopRequest
     {
