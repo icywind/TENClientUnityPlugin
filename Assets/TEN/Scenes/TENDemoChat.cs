@@ -28,6 +28,7 @@ namespace Agora.TEN.Demo
         internal IRtcEngine RtcEngine;
 
         internal uint LocalUID { get; set; }
+        StreamTextProcessor _textProcessor;
 
         void Start()
         {
@@ -136,9 +137,12 @@ namespace Agora.TEN.Demo
 
         internal async void StartSession()
         {
-            Debug.Log($"AppConfig voicetype = {AppConfig.Shared.VoiceType}");
             var res = await NetworkManager.ApiRequestStartService(LocalUID);
             Debug.Log(res);
+            //Debug.Log($"AppConfig voicetype = {AppConfig.Shared.VoiceType}");
+
+            ResetText();
+
             // Sample response:
             // { "code": "0", "data": null, "msg": "success" }
             AgoraServerCommandResponse response = JsonConvert.DeserializeObject<AgoraServerCommandResponse>(res);
@@ -164,6 +168,39 @@ namespace Agora.TEN.Demo
         }
 
         #endregion
+        internal void ResetText()
+        {
+            _textProcessor = new StreamTextProcessor();
+            LogText.text = ""; // clear the text
+        }
+
+        internal void ProcessTextData(uint uid, string text)
+        {
+            var stt = JsonConvert.DeserializeObject<STTStreamText>(text);
+            var msg = new IChatItem
+            {
+                //userId: uid, text: stt.text, time: stt.textTS, isFinal: stt.isFinal, isAgent: 0 == stt.streamID
+                UserId = uid,
+                IsFinal = stt.IsFinal,
+                Time = stt.TextTS,
+                Text = stt.Text,
+                IsAgent = (stt.StreamID == 0)
+            };
+            _textProcessor.AddChatItem(msg);
+            DisplayChatMessages();
+        }
+
+        void DisplayChatMessages()
+        {
+            var msgs = _textProcessor.GetConversation();
+            LogText.text = "";
+            foreach (var msg in msgs)
+            {
+                string color = msg.Speaker == "Agent" ? "blue" : "black";
+                string speaker = $"<color='{color}'><b>{msg.Speaker}</b></color>";
+                LogText.text += $"{speaker}: {msg.Message}\n";
+            }
+        }
     }
 
     #region -- Agora Event ---
@@ -218,6 +255,7 @@ namespace Agora.TEN.Demo
         {
             string str = System.Text.Encoding.UTF8.GetString(data, 0, (int)length);
             Debug.Log($"StreamMessage from:{remoteUid} ---> " + str);
+            _app.ProcessTextData(remoteUid, str);
         }
 
         public override void OnRemoteAudioStateChanged(RtcConnection connection, uint remoteUid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed)

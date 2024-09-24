@@ -165,7 +165,7 @@ namespace Agora.TEN.Server.Models
 
         /// The stream ID.
         [JsonProperty("stream_id")]
-        public int StreamID { get; set; }
+        public long StreamID { get; set; }
 
         /// The data type.
         [JsonProperty("data_type")]

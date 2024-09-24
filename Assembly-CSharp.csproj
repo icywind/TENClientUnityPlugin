@@ -106,6 +106,7 @@
      <Compile Include="Assets\Agora-RTC-Plugin\API-Example\Tools\UIElementDragger.cs" />
      <Compile Include="Assets\Scenes\TestTEN.cs" />
      <Compile Include="Assets\TEN\Controllers\NetworkManager.cs" />
+     <Compile Include="Assets\TEN\Controllers\StreamTextProcessor.cs" />
      <Compile Include="Assets\TEN\Models\NetworkModels.cs" />
      <Compile Include="Assets\TEN\Models\TENAppConfig.cs" />
      <Compile Include="Assets\TEN\Scenes\TENDemoChat.cs" />
