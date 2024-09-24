@@ -72,10 +72,6 @@ namespace Agora.TEN.Client
         [JsonProperty("agoraAsrLanguage")]
         public string AgoraAsrLanguage { get; set; }
 
-        /// Proxy setting for OpenAI, optional
-        [JsonProperty("openaiProxyUrl")]
-        public string OpenaiProxyUrl { get; set; }
-
         /// The voice used by the Agent
         [JsonProperty("voiceType")]
         public VoiceType VoiceType { get; set; }
@@ -95,6 +91,9 @@ namespace Agora.TEN.Client
         /// Choose product type from "rtc", "ilr", "voice"
         [JsonProperty("product")]
         public RtcProducts Product { get; set; }
+
+        [JsonProperty("graph")]
+        public string GraphName { get; set; }
 
         /// The base URL of the server
         [JsonProperty("serverBaseURL")]
@@ -134,12 +133,12 @@ namespace Agora.TEN.Client
             this.RtcToken = input.RtcToken;
             this.ServerBaseURL = input.ServerBaseURL;
             this.VoiceType = input.VoiceType;
-            this.OpenaiProxyUrl = input.OpenaiProxyUrl;
+            this.GraphName = input.Graph;
         }
 
         public override string ToString()
         {
-            return $"AgentUid: {AgentUid}, AgoraAsrLanguage: {AgoraAsrLanguage}, OpenaiProxyUrl: {OpenaiProxyUrl}, VoiceType: {VoiceType}, AppId: {AppId}, Channel: {Channel}, RtcToken: {RtcToken}, Product: {Product}, ServerBaseURL: {ServerBaseURL}";
+            return $"AgentUid: {AgentUid}, AgoraAsrLanguage: {AgoraAsrLanguage}, VoiceType: {VoiceType}, AppId: {AppId}, Channel: {Channel}, RtcToken: {RtcToken}, Product: {Product}, ServerBaseURL: {ServerBaseURL}";
         }
     }
 

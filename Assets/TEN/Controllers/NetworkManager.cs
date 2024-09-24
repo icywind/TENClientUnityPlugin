@@ -58,9 +58,9 @@ namespace Agora.TEN.Client
                 RequestId = GetUUID(),
                 ChannelName = config.Channel,
                 UserUid = uid,
-                GraphName = "camera.va.openai.azure",
+                GraphName = config.GraphName, // e.g.  "camera.va.openai.azure",
                 VoiceType = config.VoiceType.ToString().ToLower(),
-                Language = "en-US",
+                Language = config.AgoraAsrLanguage, // e.g. en-US
             };
 
             //var data = new StartServiceRequest

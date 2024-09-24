@@ -10,11 +10,15 @@ using Logger = Agora_RTC_Plugin.API_Example.Logger;
 using Agora.TEN.Client;
 using Agora.TEN.Server.Models;
 using Newtonsoft.Json;
+using Agora_RTC_Plugin.API_Example.Examples.Advanced.ProcessAudioRawData;
 
 namespace Agora.TEN.Demo
 {
     public class TENDemoChat : MonoBehaviour
     {
+        [SerializeField]
+        Text TitleText;
+
         [SerializeField]
         RawImage VideoView;
 
@@ -24,11 +28,18 @@ namespace Agora.TEN.Demo
         [SerializeField]
         Text LogText;
 
+
         internal Logger Log;
         internal IRtcEngine RtcEngine;
 
         internal uint LocalUID { get; set; }
         StreamTextProcessor _textProcessor;
+
+        [SerializeField]
+        internal SphereVisualizer Visualizer;
+
+        public int CHANNEL = 1;
+        public int SAMPLE_RATE = 44100;
 
         void Start()
         {
@@ -56,6 +67,8 @@ namespace Agora.TEN.Demo
 
         void SetUpUI()
         {
+            TitleText.text = AppConfig.Shared.Channel;
+
             var videoSurface = VideoView.gameObject.AddComponent<VideoSurface>();
             videoSurface.OnTextureSizeModify += (int width, int height) =>
             {
@@ -79,8 +92,9 @@ namespace Agora.TEN.Demo
             {
                 SceneManager.LoadScene("TENEntryScreen");
             });
-
         }
+
+
         #region --- RTC Functions ---
         internal void ShowVideo()
         {
@@ -100,6 +114,12 @@ namespace Agora.TEN.Demo
             context.areaCode = AREA_CODE.AREA_CODE_GLOB;
             RtcEngine.Initialize(context);
             RtcEngine.InitEventHandler(handler);
+
+            RtcEngine.SetPlaybackAudioFrameBeforeMixingParameters(SAMPLE_RATE, CHANNEL);
+
+            RtcEngine.RegisterAudioFrameObserver(new AudioFrameObserver(this),
+                 AUDIO_FRAME_POSITION.AUDIO_FRAME_POSITION_BEFORE_MIXING,
+                OBSERVER_MODE.RAW_DATA);
         }
 
         async void GetTokenAndJoin()
@@ -265,4 +285,32 @@ namespace Agora.TEN.Demo
     }
 
     #endregion
+
+    internal class AudioFrameObserver : IAudioFrameObserver
+    {
+        TENDemoChat _app;
+        internal AudioFrameObserver(TENDemoChat client)
+        {
+            _app = client;
+        }
+
+        public override bool OnPlaybackAudioFrameBeforeMixing(string channel_id,
+                                                        uint uid,
+                                                        AudioFrame audio_frame)
+        {
+            Debug.Log("OnPlaybackAudioFrameBeforeMixing-----------");
+            var floatArray = ProcessAudioRawData.ConvertByteToFloat16(audio_frame.RawBuffer);
+            _app.Visualizer?.UpdateVisualizer(floatArray);
+            return false;
+        }
+
+        public override bool OnPlaybackAudioFrameBeforeMixing(string channel_id,
+                                                        string uid,
+                                                        AudioFrame audio_frame)
+        {
+            Debug.Log("OnPlaybackAudioFrameBeforeMixing2-----------");
+            return false;
+        }
+    }
+
 }

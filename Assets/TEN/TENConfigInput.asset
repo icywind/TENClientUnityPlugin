@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppID: 3df5beb6c72340639f5b214c59f763c6
   RtcToken: 
-  ChannelName: YOUR_CHANNEL_NAME
+  ChannelName: 
   AgentUid: 1234
   AgoraAsrLanguage: en-US
-  OpenaiProxyUrl: 
-  VoiceType: 1
+  Graph: camera.va.openai.azure
+  VoiceType: 0
   ServerBaseURL: http://localhost:8080

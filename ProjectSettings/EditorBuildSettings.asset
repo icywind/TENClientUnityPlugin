@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TEN/Scenes/TENDemoScene.unity
     guid: ae53546af57874193bb994d6f82d8693
+  - enabled: 1
+    path: Assets/Agora-RTC-Plugin/API-Example/HomeScene.unity
+    guid: afbde366e660d4272b8d45e2d7d96f50
+  - enabled: 1
+    path: Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/ProcessAudioRawData/ProcessAudioRawDataScene.unity
+    guid: 5bad6ee5650d5460aad18db072946cc3
   m_configObjects: {}

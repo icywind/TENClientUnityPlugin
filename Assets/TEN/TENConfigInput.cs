@@ -28,8 +28,8 @@ namespace Agora.TEN.Client
         public string AgoraAsrLanguage = "en-US";
 
         [SerializeField]
-        /// Proxy setting for OpenAI, optional
-        public string OpenaiProxyUrl = "";
+        /// TEN Graph Name
+        public string Graph = "";
 
         [SerializeField]
         /// The voice used by the Agent
