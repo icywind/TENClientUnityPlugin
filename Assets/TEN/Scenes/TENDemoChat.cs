@@ -169,8 +169,6 @@ namespace Agora.TEN.Demo
         internal async void StartSession()
         {
             var res = await NetworkManager.ApiRequestStartService(LocalUID);
-            Debug.Log(res);
-            //Debug.Log($"AppConfig voicetype = {AppConfig.Shared.VoiceType}");
 
             ResetText();
 

@@ -331,7 +331,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 60769abee66b54138b9208c353a0e8ad, type: 2}
+      objectReference: {fileID: 2100000, guid: 6e90ef0af94b4450d9ae04f753e4cead, type: 2}
     - target: {fileID: 3782530549851873102, guid: 6c7dda86f0f0d4f5b9fc806bd4a34f44,
         type: 3}
       propertyPath: rotationSpeed
@@ -1185,7 +1185,7 @@ Light:
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
+    m_Bias: 0.035
     m_NormalBias: 0.4
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
@@ -1232,7 +1232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547202983}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 10.35, y: 12.67, z: 9.18}
+  m_LocalPosition: {x: 10.35, y: 18.6, z: 9.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1371,7 +1371,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 9, y: -0.00009115051}
+  m_AnchoredPosition: {x: 0, y: -0.00009115051}
   m_SizeDelta: {x: -596.9922, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1669994839
