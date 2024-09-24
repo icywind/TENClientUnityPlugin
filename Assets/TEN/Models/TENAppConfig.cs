@@ -134,6 +134,7 @@ namespace Agora.TEN.Client
             this.ServerBaseURL = input.ServerBaseURL;
             this.VoiceType = input.VoiceType;
             this.GraphName = input.Graph;
+            this.Channel = input.ChannelName;
         }
 
         public override string ToString()

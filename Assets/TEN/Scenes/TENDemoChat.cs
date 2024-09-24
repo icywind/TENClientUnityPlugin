@@ -30,13 +30,15 @@ namespace Agora.TEN.Demo
         [SerializeField]
         internal TENSessionManager TENSession;
 
+        [SerializeField]
+        internal SphereVisualizer Visualizer;
+
+
         internal Logger Log;
         internal IRtcEngine RtcEngine;
 
         internal uint LocalUID { get; set; }
 
-        [SerializeField]
-        internal SphereVisualizer Visualizer;
 
         [SerializeField]
         Button CamButton;

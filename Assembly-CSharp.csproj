@@ -67,6 +67,7 @@
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/CustomRenderAudio/CustomRenderAudio.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/CustomCaptureVideo/StaticImagePush/TexturePush.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Basic/JoinChannelVideo/RemoteVideoCallQualityPanel.cs" />
+    <Compile Include="Assets/TEN/Controllers/Simple2PeopleChatDisplay.cs" />
     <Compile Include="Assets/TEN/Scenes/TENDemoChat.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/AudioMixing/AudioMixing.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/MediaRecorder/MediaRecorder.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets/TEN/Controllers/SoundVisualizer.cs" />
     <Compile Include="Assets/TEN/Controllers/NetworkManager.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/SpatialAudioWithMediaPlayer/SpatialAudioWithMediaPlayer.cs" />
+    <Compile Include="Assets/TEN/Controllers/IChatTextDisplay.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Tools/PermissionHelper.cs" />
     <Compile Include="Assets/TEN/Controllers/StreamTextProcessor.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/StartDirectCdnStreaming/StartDirectCdnStreaming.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/SetVideoEncodeConfiguration/SetVideoEncodeConfiguration.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/JoinChannelWithUserAccount/JoinChannelWithUserAccount.cs" />
     <Compile Include="Assets/TEN/Models/NetworkModels.cs" />
+    <Compile Include="Assets/TEN/Controllers/TENSessionManager.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/StartRtmpStreamWithTranscoding/StartRtmpStreamWithTranscoding.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/AppIdInput/AppIdInput.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/StartLocalVideoTranscoder/StartLocalVideoTranscoder.cs" />
@@ -122,9 +125,6 @@
     <Compile Include="Assets/TEN/Utils/DragObject.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/StartRhythmPlayer/StartRhythmPlayer.cs" />
     <Compile Include="Assets/Agora-RTC-Plugin/API-Example/Examples/Advanced/PushEncodedVideoImage/PushEncodedVideoImage.cs" />
-    <Compile Include="Assets/TEN/Controllers/IChatTextDisplay.cs" />
-    <Compile Include="Assets/TEN/Controllers/Simple2PeopleChatDisplay.cs" />
-    <Compile Include="Assets/TEN/Controllers/TENSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Agora-RTC-Plugin/Agora-Unity-RTC-SDK/Plugins/macOS/AgoraRtcWrapperUnity.bundle/Contents/Frameworks/AgoraRtcKit.framework/Versions/A/Headers/IAgoraMediaStreamingSource.h" />

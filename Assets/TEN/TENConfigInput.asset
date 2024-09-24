@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607f0ceac71e449edb8c59fb1d047575, type: 3}
   m_Name: TENConfigInput
   m_EditorClassIdentifier: 
-  AppID: 3df5beb6c72340639f5b214c59f763c6
+  AppID: 
   RtcToken: 
-  ChannelName: 
+  ChannelName: agora_unity2
   AgentUid: 1234
   AgoraAsrLanguage: en-US
   Graph: camera.va.openai.azure
