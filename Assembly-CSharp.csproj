@@ -115,6 +115,7 @@
      <Compile Include="Assets\TEN\Scenes\TENDemoEntry.cs" />
      <Compile Include="Assets\TEN\TENConfigInput.cs" />
      <Compile Include="Assets\TEN\Utils\DragObject.cs" />
+     <Compile Include="Assets\TEN\Utils\UIElementDragger.cs" />
      <Compile Include="Assets\TEN\Utils\UtilFunctions.cs" />
      <None Include="Assets\Agora-RTC-Plugin\Agora-Unity-RTC-SDK\Resources\UI-RendererShader601.shader" />
      <None Include="Assets\Agora-RTC-Plugin\Agora-Unity-RTC-SDK\Resources\Unlit-RendererShader601.shader" />

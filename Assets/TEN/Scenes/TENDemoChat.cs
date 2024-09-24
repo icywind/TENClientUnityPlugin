@@ -38,6 +38,9 @@ namespace Agora.TEN.Demo
         [SerializeField]
         internal SphereVisualizer Visualizer;
 
+        [SerializeField]
+        Button CamButton;
+
         public int CHANNEL = 1;
         public int SAMPLE_RATE = 44100;
 
@@ -92,6 +95,14 @@ namespace Agora.TEN.Demo
             {
                 SceneManager.LoadScene("TENEntryScreen");
             });
+
+#if !UNITY_EDITOR && ( UNITY_ANDROID || UNITY_IOS )
+            CamButton.onClick.AddListener(() => {
+                RtcEngine.SwitchCamera();
+	        });
+#else 
+            CamButton.gameObject.SetActive(false);
+#endif
         }
 
 
@@ -298,17 +309,8 @@ namespace Agora.TEN.Demo
                                                         uint uid,
                                                         AudioFrame audio_frame)
         {
-            Debug.Log("OnPlaybackAudioFrameBeforeMixing-----------");
             var floatArray = ProcessAudioRawData.ConvertByteToFloat16(audio_frame.RawBuffer);
             _app.Visualizer?.UpdateVisualizer(floatArray);
-            return false;
-        }
-
-        public override bool OnPlaybackAudioFrameBeforeMixing(string channel_id,
-                                                        string uid,
-                                                        AudioFrame audio_frame)
-        {
-            Debug.Log("OnPlaybackAudioFrameBeforeMixing2-----------");
             return false;
         }
     }

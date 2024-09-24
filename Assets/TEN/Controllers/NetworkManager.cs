@@ -152,7 +152,7 @@ namespace Agora.TEN.Client
         {
             var json = JsonConvert.SerializeObject(data);
 
-            Debug.LogWarning("API Sending data:" + json);
+            Debug.Log("API Sending data:" + json);
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";

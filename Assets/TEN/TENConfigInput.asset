@@ -19,4 +19,4 @@ MonoBehaviour:
   AgoraAsrLanguage: en-US
   Graph: camera.va.openai.azure
   VoiceType: 0
-  ServerBaseURL: http://localhost:8080
+  ServerBaseURL: https://astra.agoraguru.net
