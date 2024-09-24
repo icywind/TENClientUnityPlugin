@@ -41,7 +41,7 @@ public static class UtilFunctions
         }).ToList();
     }
 
-    private static float[] ConvertByteToFloat16(byte[] byteArray)
+    public static float[] ConvertByteToFloat16(byte[] byteArray)
     {
         var floatArray = new float[byteArray.Length / 2];
         for (var i = 0; i < floatArray.Length; i++)

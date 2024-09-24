@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 public class IChatItem
 {
@@ -10,16 +9,10 @@ public class IChatItem
     public bool IsAgent { get; set; }
 }
 
-public class ChatMessage
-{
-    public string Speaker { get; set; }
-    public string Message { get; set; }
-}
 
 public class StreamTextProcessor
 {
     List<IChatItem> SttWords { get; set; } = new List<IChatItem>();
-    List<ChatMessage> ChatMessages { get; set; } = new List<ChatMessage>();
 
     public void AddChatItem(IChatItem item)
     {
@@ -63,15 +56,11 @@ public class StreamTextProcessor
         }
 
         SttWords.Sort((x, y) => x.Time.CompareTo(y.Time));
-        ChatMessages = SttWords.Select(x => new ChatMessage
-        {
-            Speaker = x.IsAgent ? "Agent" : "You",
-            Message = x.Text
-        }).ToList();
+
     }
 
-    public List<ChatMessage> GetConversation()
+    public IList<IChatItem> GetConversation()
     {
-        return ChatMessages;
+        return SttWords;
     }
 }

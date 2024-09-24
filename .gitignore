@@ -29,7 +29,8 @@ Thumbs.db
 !/ProjectSettings/EditorBuildSettings.asset
 !/ProjectSettings/ProjectSettings.asset
 
-
+/UserSettings/
+.vsconfig
 *.app
 
 # Uncomment this line if you wish to ignore the asset store tools plugin

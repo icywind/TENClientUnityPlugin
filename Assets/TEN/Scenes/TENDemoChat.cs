@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Agora.Rtc;
@@ -8,9 +7,6 @@ using Agora_RTC_Plugin.API_Example;
 using Logger = Agora_RTC_Plugin.API_Example.Logger;
 
 using Agora.TEN.Client;
-using Agora.TEN.Server.Models;
-using Newtonsoft.Json;
-using Agora_RTC_Plugin.API_Example.Examples.Advanced.ProcessAudioRawData;
 
 namespace Agora.TEN.Demo
 {
@@ -26,14 +22,18 @@ namespace Agora.TEN.Demo
         Button BackButton;
 
         [SerializeField]
-        Text LogText;
+        internal Text LogText;
 
+        [SerializeField]
+        internal IChatTextDisplay TextDisplay;
+
+        [SerializeField]
+        internal TENSessionManager TENSession;
 
         internal Logger Log;
         internal IRtcEngine RtcEngine;
 
         internal uint LocalUID { get; set; }
-        StreamTextProcessor _textProcessor;
 
         [SerializeField]
         internal SphereVisualizer Visualizer;
@@ -135,10 +135,7 @@ namespace Agora.TEN.Demo
 
         async void GetTokenAndJoin()
         {
-            string res = await NetworkManager.RequestTokenAsync(0);
-            Debug.Log(res);
-
-            AppConfig.Shared.RtcToken = res;
+            AppConfig.Shared.RtcToken = await TENSession.GetToken();
             JoinChannel();
         }
 
@@ -154,82 +151,16 @@ namespace Agora.TEN.Demo
         {
             Debug.Log($"{name}.{this.GetType()} OnDestroy");
 
-            StopSession();
+            TENSession.StopSession();
             if (RtcEngine != null)
             {
+                RtcEngine.LeaveChannel();
                 RtcEngine.InitEventHandler(null);
                 RtcEngine.Dispose();
                 RtcEngine = null;
             }
         }
         #endregion
-
-        #region --- TEN Session APIs ---
-
-        internal async void StartSession()
-        {
-            var res = await NetworkManager.ApiRequestStartService(LocalUID);
-
-            ResetText();
-
-            // Sample response:
-            // { "code": "0", "data": null, "msg": "success" }
-            AgoraServerCommandResponse response = JsonConvert.DeserializeObject<AgoraServerCommandResponse>(res);
-            if (response.Code == "0" || response.Msg.ToLower() == "success")
-            {
-                StartCoroutine(KeepAlive());
-            }
-        }
-
-        internal IEnumerator KeepAlive()
-        {
-            while (RtcEngine != null)
-            {
-                yield return new WaitForSeconds(3);
-                _ = NetworkManager.ApiRequestPingService();
-            }
-        }
-
-        internal void StopSession()
-        {
-            _ = NetworkManager.ApiRequestStopService();
-            RtcEngine?.LeaveChannel();
-        }
-
-        #endregion
-        internal void ResetText()
-        {
-            _textProcessor = new StreamTextProcessor();
-            LogText.text = ""; // clear the text
-        }
-
-        internal void ProcessTextData(uint uid, string text)
-        {
-            var stt = JsonConvert.DeserializeObject<STTStreamText>(text);
-            var msg = new IChatItem
-            {
-                //userId: uid, text: stt.text, time: stt.textTS, isFinal: stt.isFinal, isAgent: 0 == stt.streamID
-                UserId = uid,
-                IsFinal = stt.IsFinal,
-                Time = stt.TextTS,
-                Text = stt.Text,
-                IsAgent = (stt.StreamID == 0)
-            };
-            _textProcessor.AddChatItem(msg);
-            DisplayChatMessages();
-        }
-
-        void DisplayChatMessages()
-        {
-            var msgs = _textProcessor.GetConversation();
-            LogText.text = "";
-            foreach (var msg in msgs)
-            {
-                string color = msg.Speaker == "Agent" ? "blue" : "black";
-                string speaker = $"<color='{color}'><b>{msg.Speaker}</b></color>";
-                LogText.text += $"{speaker}: {msg.Message}\n";
-            }
-        }
     }
 
     #region -- Agora Event ---
@@ -260,7 +191,7 @@ namespace Agora.TEN.Demo
             _app.LocalUID = connection.localUid;
 
             _app.ShowVideo();
-            _app.StartSession();
+            _app.TENSession.StartSession(_app.LocalUID);
         }
 
         public override void OnLeaveChannel(RtcConnection connection, RtcStats stats)
@@ -284,7 +215,8 @@ namespace Agora.TEN.Demo
         {
             string str = System.Text.Encoding.UTF8.GetString(data, 0, (int)length);
             Debug.Log($"StreamMessage from:{remoteUid} ---> " + str);
-            _app.ProcessTextData(remoteUid, str);
+            _app.TextDisplay.ProcessTextData(remoteUid, str);
+            _app.TextDisplay.DisplayChatMessages(_app.LogText.gameObject);
         }
 
         public override void OnRemoteAudioStateChanged(RtcConnection connection, uint remoteUid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed)
@@ -307,7 +239,7 @@ namespace Agora.TEN.Demo
                                                         uint uid,
                                                         AudioFrame audio_frame)
         {
-            var floatArray = ProcessAudioRawData.ConvertByteToFloat16(audio_frame.RawBuffer);
+            var floatArray = UtilFunctions.ConvertByteToFloat16(audio_frame.RawBuffer);
             _app.Visualizer?.UpdateVisualizer(floatArray);
             return false;
         }

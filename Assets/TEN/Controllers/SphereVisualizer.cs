@@ -4,18 +4,28 @@ public class SphereVisualizer : MonoBehaviour
 {
     [SerializeField]
     float sizeMultiplier = 10f; // Multiplier for sphere size
+
     [SerializeField]
     float rotationSpeed = 100.0f; // Rotation speed in degrees per second
+
+    [SerializeField]
+    bool showSizeMotion;
+
+    [SerializeField]
+    bool showRotationMotion;
 
     float[] _pcmData = new float[0];
 
     private void Update()
     {
-        if (_pcmData.Length > 0)
+        if (showSizeMotion)
         {
-            //ShowSizeMotion();
+            ShowSizeMotion();
         }
-        ShowRotationMotion();
+        if (showRotationMotion)
+        {
+            ShowRotationMotion();
+        }
     }
 
 
@@ -27,7 +37,6 @@ public class SphereVisualizer : MonoBehaviour
     void ShowRotationMotion()
     {
         float energy = GetAverageEnergy();
-        Debug.Log("Energy = " + energy);
         // Rotate the sphere around the y-axis
         transform.Rotate(0, (energy * sizeMultiplier * 450 + rotationSpeed) * Time.deltaTime, 0);
     }
